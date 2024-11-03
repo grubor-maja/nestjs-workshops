@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OrderItem } from './order-item.entity';
 import { Repository } from 'typeorm';
-import { Order } from './../../../order/src/order/order.entity';
 import { AddOrderItemDto } from 'src/dtos/add-order-item.dto';
 
 @Injectable()
@@ -23,10 +22,12 @@ export class OrderItemService {
 
     async updateOrderItem(productId: number, attrs: Partial<OrderItem>) {
         const orderItems = await this.getOrderItemByProductId(productId);
-        if(!orderItems) throw new Error('No order item with given product id.');
+        if (!orderItems || orderItems.length === 0) throw new Error('No order item with given product id.');
+        
         Object.assign(orderItems[0], attrs);
-        return await this.repo.save(orderItems);
+        return await this.repo.save(orderItems[0]); 
     }
+    
 
     async removeOrderItem(id: number) {
         const orderItem = await this.getOrderItem(id);

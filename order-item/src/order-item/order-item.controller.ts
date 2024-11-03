@@ -1,6 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { OrderItemService } from './order-item.service';
 import { EventPattern, MessagePattern } from '@nestjs/microservices';
+import { AddOrderItemDto } from 'src/dtos/add-order-item.dto';
 
 @Controller('order-item')
 export class OrderItemController {
@@ -17,7 +18,7 @@ export class OrderItemController {
     }
 
     @MessagePattern('create-order-item')
-    createOrderItem(data: {productId: number; quantity: number}) {
+    createOrderItem(data: AddOrderItemDto) {
         return this.orderItemService.createOrderItem(data);
     }
 
